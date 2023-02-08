@@ -1,0 +1,48 @@
+#!/bin/bash
+set -e
+
+# check for golangci-lint
+if ! which golangci-lint 1>&2 > /dev/null; then
+  echo -n "Seems like golangci-lint is not installed. Do you wish to proceed with the installation? [y/N] "
+  read -r proceed
+  if [ "$proceed" = "y" ]; then
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.50.1
+
+  else
+    echo "Please refer to https://golangci-lint.run/ for more information regarding golangci-lint"
+    exit 1
+  fi
+fi
+
+# check for go-oif
+if ! which go-oif 1>&2 > /dev/null; then
+  echo -n "Seems like go-oif is not installed. Do you wish to proceed with the installation? [y/N] "
+  read -r proceed
+  if [ "$proceed" = "y" ]; then
+    curl -sSfL https://raw.githubusercontent.com/heyvito/go-oif/main/install.sh | sh -s -- -b "$(go env GOPATH)/bin"
+
+  else
+    echo "Please refer to https://github.com/heyvito/go-oif for more information regarding go-oif"
+    exit 1
+  fi
+fi
+
+
+go-oif ./...
+golangci-lint run \
+        -E gosec \
+        -E prealloc \
+        -E exportloopref \
+        -E nestif \
+        -E depguard \
+        -E goimports \
+        -E prealloc \
+        -E unconvert \
+        -E noctx \
+        -E gosimple \
+        -E govet \
+        -E ineffassign \
+        -E staticcheck \
+        -E unused \
+        -E asasalint \
+        ./...

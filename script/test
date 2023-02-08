@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+if [[ "$1" == "--cover" ]]; then
+  echo "$0"
+  mkdir -p coverage
+  find coverage \
+    -type f \
+    -delete
+
+  export COVER="yes"
+fi
+
+
+go mod download
+go mod tidy
+if [[ "$COVER" == "yes" ]]; then
+  OUT="../coverage/$plugin.out"
+  HTML="../coverage/$plugin.html"
+  go test ./... -covermode=count -coverprofile="$OUT"
+  go tool cover -html="$OUT" -o "$HTML"
+  rm "$OUT"
+else
+  go test ./...
+fi
+
