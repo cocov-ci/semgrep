@@ -32,11 +32,11 @@ func TestFindYamlRecursive(t *testing.T) {
 			require.NoError(t, err)
 		}
 
-		defer func() {
+		t.Cleanup(func() {
 			for _, p := range paths {
 				_ = os.RemoveAll(p)
 			}
-		}()
+		})
 
 		pathsFound, err := findYamlRecursive(wd)
 		require.NoError(t, err)
@@ -56,6 +56,5 @@ func TestFindYamlRecursive(t *testing.T) {
 		}
 
 		assert.Equal(t, len(paths), okCount)
-
 	})
 }
