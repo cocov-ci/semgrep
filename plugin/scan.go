@@ -58,8 +58,27 @@ type start struct {
 func (s *scan) renderResults(rootPath string) *scan {
 	if len(s.Results) > 0 {
 		for _, r := range s.Results {
-			r.Path = strings.TrimPrefix(r.Path, rootPath)
+			v, ok := cocovIssues[r.Extra.Metadata.Category]
+			r.valid = ok
+			if !ok {
+				continue
+			}
+
+			r.kind = v
+
+			refs := r.Extra.Metadata.References
+			if len(refs) > 0 {
+				r.Extra.Message = renderMessage(r.Extra.Message, refs)
+			}
+
+			if filepath.Dir(r.Path) != rootPath {
+				r.Path = strings.TrimPrefix(r.Path, rootPath)[1:]
+			}
 		}
 	}
 	return s
+}
+
+func renderMessage(message string, references []string) string {
+	return fmt.Sprintf("%s\nreferences:\n%s", message, strings.Join(references, "\n"))
 }
