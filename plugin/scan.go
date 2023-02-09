@@ -26,7 +26,7 @@ type start struct {
 	Line int `json:"line"`
 }
 
-func (s *scan) renderPaths(rootPath string) *scan {
+func (s *scan) renderResults(rootPath string) *scan {
 	if len(s.Results) > 0 {
 		for _, r := range s.Results {
 			r.Path = strings.TrimPrefix(r.Path, rootPath)

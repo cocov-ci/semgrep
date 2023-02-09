@@ -33,7 +33,7 @@ func (j job) run(scanChan chan *scan, errChan chan error) {
 	}
 
 	if len(s.Results) > 0 {
-		scanChan <- s.renderPaths(j.rootPath)
+		scanChan <- s.renderResults(j.rootPath)
 	}
 
 }

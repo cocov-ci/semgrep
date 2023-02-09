@@ -2,7 +2,6 @@ package plugin
 
 import (
 	"encoding/json"
-
 	"github.com/cocov-ci/go-plugin-kit/cocov"
 	"go.uber.org/zap"
 )
@@ -63,7 +62,7 @@ func run(ctx cocov.Context, logger *zap.Logger) ([]*scan, error) {
 		return nil, decodeError
 	}
 
-	s.renderPaths(rootPath)
+	s.renderResults(rootPath)
 
 	return []*scan{s}, nil
 }
