@@ -1,6 +1,33 @@
 package plugin
 
-import "strings"
+import (
+	"fmt"
+	"github.com/cocov-ci/go-plugin-kit/cocov"
+	"path/filepath"
+	"strings"
+)
+
+// Those constants represents official semgrep results categories.
+const (
+	bestPractice    = "best-practice"
+	correctness     = "correctness"
+	maintainability = "maintainability"
+	performance     = "performance"
+	portability     = "portability"
+	security        = "security"
+)
+
+var cocovIssues = map[string]cocov.IssueKind{
+	correctness:     cocov.IssueKindQuality,
+	portability:     cocov.IssueKindQuality,
+	maintainability: cocov.IssueKindQuality,
+
+	bestPractice: cocov.IssueKindConvention,
+
+	performance: cocov.IssueKindPerformance,
+
+	security: cocov.IssueKindSecurity,
+}
 
 type scan struct {
 	Results []result `json:"results"`
