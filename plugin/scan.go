@@ -37,6 +37,8 @@ type result struct {
 	Path  string `json:"path"`
 	Extra extra  `json:"extra"`
 	Start start  `json:"start"`
+	kind  cocov.IssueKind
+	valid bool
 }
 
 type extra struct {
