@@ -30,7 +30,7 @@ var cocovIssues = map[string]cocov.IssueKind{
 }
 
 type scan struct {
-	Results []result `json:"results"`
+	Results []*result `json:"results"`
 }
 
 type result struct {
