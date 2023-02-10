@@ -5,16 +5,17 @@ if ! which mockgen 1>&2 > /dev/null; then
   read -r proceed
   if [ "$proceed" = "y" ]; then
     go install github.com/golang/mock/mockgen@v1.6.0
-    go get -u github.com/golang/mock/mockgen/model
   else
     echo "Please refer to gomock for more details: https://github.com/golang/mock"
     exit 1
   fi
 fi
 
-rm -rfv mocks
-mkdir -p common/mocks
-# shellcheck disable=SC2164
-cd common
+go get -u github.com/golang/mock/mockgen/model
 
-mockgen -package=sdkmocks github.com/cocov-ci/go-plugin-kit/cocov Context > mocks/context.go
+rm -rfv mocks
+mkdir -p mocks
+# shellcheck disable=SC2164
+
+mockgen -package="mocks" -source="plugin/iface.go" > "mocks/iface.go"
+mockgen -package="mocks" github.com/cocov-ci/go-plugin-kit/cocov Context > mocks/context.go
