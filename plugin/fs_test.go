@@ -3,9 +3,9 @@ package plugin
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -13,48 +13,42 @@ func TestFindYamlRecursive(t *testing.T) {
 	wd, err := os.Getwd()
 	require.NoError(t, err)
 
+	wd = findParentDir(t, wd, "semgrep")
+
 	t.Run("Yaml not found", func(t *testing.T) {
-		paths, err := findYamlRecursive(wd)
+		parent := filepath.Join(wd, "mocks")
+		paths, err := findYamlRecursive(parent)
 		require.NoError(t, err)
 		require.Len(t, paths, 0)
 	})
 
 	t.Run("Found yaml", func(t *testing.T) {
-		paths := []string{"fixture1", "fixture2", "fixture3"}
-
-		for i, p := range paths {
-			dir, err := os.MkdirTemp(wd, p)
-			require.NoError(t, err)
-			paths[i] = dir
-
-			fixturePath := filepath.Join(dir, "semgrep.yaml")
-			_, err = os.Create(fixturePath)
-			require.NoError(t, err)
-		}
-
-		t.Cleanup(func() {
-			for _, p := range paths {
-				_ = os.RemoveAll(p)
-			}
-		})
-
-		pathsFound, err := findYamlRecursive(wd)
+		parent := filepath.Join(wd, "plugin/fixtures")
+		pathsFound, err := findYamlRecursive(parent)
 		require.NoError(t, err)
-		assert.Len(t, pathsFound, 3)
 
-		okCount := 0
+		entries, err := os.ReadDir(parent)
+		require.NoError(t, err)
+		require.Equal(t, len(entries), len(pathsFound))
 
-		for _, p := range paths {
-			for _, found := range pathsFound {
-				if found.path == p {
-					okCount += 1
-					f, err := os.Stat(found.filePath())
-					assert.NoError(t, err)
-					assert.False(t, f.IsDir())
-				}
-			}
+		for _, p := range pathsFound {
+			info, err := os.Stat(p.path)
+			require.NoError(t, err)
+			require.True(t, info.IsDir())
+
+			info, err = os.Stat(p.filePath())
+			require.NoError(t, err)
+			require.False(t, info.IsDir())
 		}
-
-		assert.Equal(t, len(paths), okCount)
 	})
+}
+
+func findParentDir(t *testing.T, current, parent string) string {
+	require.True(t, strings.Contains(current, parent))
+
+	if filepath.Base(current) == parent {
+		return current
+	}
+
+	return findParentDir(t, filepath.Dir(current), parent)
 }
