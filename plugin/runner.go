@@ -9,7 +9,7 @@ import (
 
 type runner struct{ executor }
 
-func newRunner(e executor) runner { return runner{e} }
+func newRunner(e executor) *runner { return &runner{e} }
 
 func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) {
 	rootPath := ctx.Workdir()
