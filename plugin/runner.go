@@ -51,7 +51,7 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 	}
 
 	res := &results{}
-	if err = json.Unmarshal(out, ru); err != nil {
+	if err = json.Unmarshal(out, res); err != nil {
 		decodeError := decodeErr(rootPath, rootArgs, out, err)
 		logger.Error("Error", zap.Error(decodeError))
 		return nil, decodeError
