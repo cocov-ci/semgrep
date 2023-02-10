@@ -41,7 +41,7 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 		}
 
 		jobs = append(jobs, newJob(rootPath, rootPath, rootArgs))
-		return ru.runParallel(jobs, logger)
+		return ru.parallel(jobs, logger)
 	}
 
 	out, err := ru.exec(rootArgs, rootPath)
@@ -62,7 +62,7 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 	return res.Results, nil
 }
 
-func (ru *runner) runParallel(jobs []job, logger *zap.Logger) ([]*result, error) {
+func (ru *runner) parallel(jobs []job, logger *zap.Logger) ([]*result, error) {
 	errs := make([]error, 0, len(jobs))
 	res := make([]*results, 0, len(jobs))
 	numWorkers := maxWorkers
