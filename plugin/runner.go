@@ -23,7 +23,7 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 
 	for _, config := range individualConfigs {
 		if config.path == rootPath {
-			rootYaml = config.path
+			rootYaml = config.filePath()
 			break
 		}
 	}
