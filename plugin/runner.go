@@ -30,7 +30,7 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 
 	rootArgs := newArgs(rootYaml, rootPath)
 
-	if len(individualConfigs) > 0 {
+	if len(individualConfigs) > 1 {
 		jobs := make([]job, 0, len(individualConfigs)+1)
 
 		for _, config := range individualConfigs {
