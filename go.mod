@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/cocov-ci/go-plugin-kit v0.1.11
+	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.8.1
 	go.uber.org/zap v1.24.0
 )
