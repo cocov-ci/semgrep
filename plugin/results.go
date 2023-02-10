@@ -21,15 +21,12 @@ var cocovIssues = map[string]cocov.IssueKind{
 	correctness:     cocov.IssueKindQuality,
 	portability:     cocov.IssueKindQuality,
 	maintainability: cocov.IssueKindQuality,
-
-	bestPractice: cocov.IssueKindConvention,
-
-	performance: cocov.IssueKindPerformance,
-
-	security: cocov.IssueKindSecurity,
+	bestPractice:    cocov.IssueKindConvention,
+	performance:     cocov.IssueKindPerformance,
+	security:        cocov.IssueKindSecurity,
 }
 
-type scan struct {
+type results struct {
 	Results []*result `json:"results"`
 }
 
@@ -55,28 +52,28 @@ type start struct {
 	Line int `json:"line"`
 }
 
-func (s *scan) renderResults(rootPath string) *scan {
-	if len(s.Results) > 0 {
-		for _, r := range s.Results {
-			v, ok := cocovIssues[r.Extra.Metadata.Category]
-			r.valid = ok
+func (r *results) renderResults(rootPath string) *results {
+	if len(r.Results) > 0 {
+		for _, res := range r.Results {
+			v, ok := cocovIssues[res.Extra.Metadata.Category]
+			res.valid = ok
 			if !ok {
 				continue
 			}
 
-			r.kind = v
+			res.kind = v
 
-			refs := r.Extra.Metadata.References
+			refs := res.Extra.Metadata.References
 			if len(refs) > 0 {
-				r.Extra.Message = renderMessage(r.Extra.Message, refs)
+				res.Extra.Message = renderMessage(res.Extra.Message, refs)
 			}
 
-			if filepath.Dir(r.Path) != rootPath {
-				r.Path = strings.TrimPrefix(r.Path, rootPath)[1:]
+			if filepath.Dir(res.Path) != rootPath {
+				res.Path = strings.TrimPrefix(res.Path, rootPath)[1:]
 			}
 		}
 	}
-	return s
+	return r
 }
 
 func renderMessage(message string, references []string) string {
