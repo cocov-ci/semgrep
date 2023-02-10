@@ -4,21 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-
-	"github.com/cocov-ci/go-plugin-kit/cocov"
 )
 
 func newArgs(configFile, path string) []string {
 	return []string{"scan", "--config", configFile, "--json", path}
-}
-
-func runScan(args []string, cwd string) ([]byte, error) {
-	opts := &cocov.ExecOpts{Workdir: cwd}
-	stdOut, stdErr, err := cocov.Exec2(cmd, args, opts)
-	if err != nil {
-		return nil, runErr(cwd, args, stdOut, stdErr, err)
-	}
-	return stdOut, nil
 }
 
 func runErr(path string, args []string, stdOut, stdErr []byte, err error) error {
@@ -43,4 +32,13 @@ func decodeErr(projectPath string, args []string, stdOut []byte, err error) erro
 	}
 
 	return errors.New(strings.Join(errMsg, "\n"))
+}
+
+func formatErrors(errs []error) error {
+	finalErr := "\n"
+	for i := 0; i < len(errs); i++ {
+		finalErr = fmt.Sprintf("%serror %d :\n%s\n", finalErr, i+1, errs[i].Error())
+	}
+
+	return errors.New(finalErr)
 }
