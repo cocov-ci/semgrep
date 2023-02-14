@@ -56,26 +56,21 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 func (ru *runner) parallel(jobs []job, logger *zap.Logger) ([]*result, error) {
 	errs := make([]error, 0, len(jobs))
 	res := make([]*results, 0, len(jobs))
-	numWorkers := maxWorkers
-
-	if len(jobs) < maxWorkers {
-		numWorkers = len(jobs)
-	}
 
 	jobChan := make(chan job)
 	errChan := make(chan error)
 	resChan := make(chan *results)
 
 	wg := &sync.WaitGroup{}
-	wg.Add(numWorkers)
+	wg.Add(maxWorkers)
 
 	for i := 0; i < maxWorkers; i++ {
-		go func(id int, done func()) {
+		go func(done func()) {
 			for j := range jobChan {
 				j.run(ru.exec, resChan, errChan)
 			}
 			done()
-		}(i, wg.Done)
+		}(wg.Done)
 	}
 
 	go func() {
