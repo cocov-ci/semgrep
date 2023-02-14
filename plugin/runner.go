@@ -67,7 +67,7 @@ func (ru *runner) parallel(jobs []job, logger *zap.Logger) ([]*result, error) {
 	for i := 0; i < maxWorkers; i++ {
 		go func(done func()) {
 			for j := range jobChan {
-				j.run(ru.exec, resChan, errChan)
+				j.run(ru.exec, resChan)
 			}
 			done()
 		}(wg.Done)

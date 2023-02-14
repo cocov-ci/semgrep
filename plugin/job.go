@@ -16,20 +16,20 @@ func newJob(rootPath, path string, args []string) job {
 
 type execFn func(args []string, path string) ([]byte, error)
 
-func (j job) run(fn execFn, resChan chan *results, errChan chan error) {
+func (j job) run(fn execFn, resChan chan *opResult) {
 	out, err := fn(j.args, j.path)
 	if err != nil {
-		errChan <- err
+		resChan <- &opResult{error: err}
 		return
 	}
 
 	res := &results{}
 	if err = json.Unmarshal(out, res); err != nil {
-		errChan <- decodeErr(j.path, j.args, out, err)
+		resChan <- &opResult{error: decodeErr(j.path, j.args, out, err)}
 	}
 
 	if len(res.Results) > 0 {
-		resChan <- res.renderResults(j.rootPath)
+		resChan <- &opResult{results: res.renderResults(j.rootPath)}
 	}
 
 }

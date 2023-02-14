@@ -26,6 +26,11 @@ var cocovIssues = map[string]cocov.IssueKind{
 	security:        cocov.IssueKindSecurity,
 }
 
+type opResult struct {
+	results *results
+	error   error
+}
+
 type results struct {
 	Results []*result `json:"results"`
 }
