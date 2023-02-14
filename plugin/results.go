@@ -68,9 +68,13 @@ func (r *results) renderResults(rootPath string) *results {
 				res.Extra.Message = renderMessage(res.Extra.Message, refs)
 			}
 
-			if filepath.Dir(res.Path) != rootPath {
-				res.Path = strings.TrimPrefix(res.Path, rootPath)[1:]
+			if filepath.Dir(res.Path) == rootPath {
+				res.Path = filepath.Base(res.Path)
+				continue
 			}
+
+			res.Path = strings.TrimPrefix(res.Path, rootPath)[1:]
+
 		}
 	}
 	return r
