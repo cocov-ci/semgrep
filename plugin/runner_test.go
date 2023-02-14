@@ -215,7 +215,7 @@ func badOutput() []byte {
 
 func expectedOutput(t *testing.T, filePath, category string, numResults int) []byte {
 	res := make([]*result, 0, numResults)
-	for i := 0; i <= numResults; i++ {
+	for i := 0; i < numResults; i++ {
 		msg := fmt.Sprintf("message for issue at path %s", filePath)
 		refs := []string{fmt.Sprintf("ref for issue at path %s", filePath)}
 		r := newResult(filePath, msg, category, refs)
