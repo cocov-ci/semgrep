@@ -15,13 +15,13 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 	rootPath := ctx.Workdir()
 	rootYaml := noYaml
 
-	individualConfigs, err := findYamlRecursive(rootPath)
+	configs, err := findYamlRecursive(rootPath)
 	if err != nil {
 		logger.Error("Error looking for semgrep configuration files", zap.Error(err))
 		return nil, err
 	}
 
-	for _, config := range individualConfigs {
+	for _, config := range configs {
 		if config.path == rootPath {
 			rootYaml = config.filePath()
 			break
@@ -30,17 +30,8 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 
 	rootArgs := newArgs(rootYaml, rootPath)
 
-	if len(individualConfigs) > 1 {
-		jobs := make([]job, 0, len(individualConfigs)+1)
-
-		for _, config := range individualConfigs {
-			rootArgs = append(rootArgs, "--exclude", config.path)
-			args := newArgs(config.filePath(), config.path)
-			j := newJob(rootPath, config.path, args)
-			jobs = append(jobs, j)
-		}
-
-		jobs = append(jobs, newJob(rootPath, rootPath, rootArgs))
+	if len(configs) > 1 {
+		jobs := buildJobs(configs, rootPath, rootArgs)
 		return ru.parallel(jobs, logger)
 	}
 
