@@ -149,7 +149,35 @@ func TestRun(t *testing.T) {
 	})
 
 	t.Run("Parallel", func(t *testing.T) {
+		t.Run("Works as expected", func(t *testing.T) {
+			rootPath := filepath.Join(wd, "plugin", "fixtures")
+			rootYaml := filepath.Join(rootPath, "semgrep.yaml")
 
+			configs, err := findYamlRecursive(rootPath)
+			require.NoError(t, err)
+
+			ctrl := gomock.NewController(t)
+			helper := newHelper(ctrl)
+
+			rootArgs := newArgs(rootYaml, rootPath)
+			jobs := buildJobs(configs, rootPath, rootArgs)
+
+			helper.ctx.EXPECT().Workdir().Return(rootPath)
+
+			for _, j := range jobs {
+				cat := performance
+				filePath := filepath.Join(j.path, "file.go")
+				output := expectedOutput(t, filePath, cat, 3)
+				opts := &cocov.ExecOpts{Workdir: j.path}
+				helper.exec.EXPECT().Exec2("semgrep", j.args, opts).
+					Return(output, nil, nil)
+			}
+
+			res, err := helper.start()
+			require.NoError(t, err)
+			assert.NotNil(t, res)
+			assert.Len(t, res, len(configs)*3)
+		})
 	})
 }
 
