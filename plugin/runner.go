@@ -58,12 +58,11 @@ func (ru *runner) parallel(jobs []job, logger *zap.Logger) ([]*result, error) {
 	res := make([]*results, 0, len(jobs))
 
 	jobChan := make(chan job)
-	errChan := make(chan error)
-	resChan := make(chan *results)
+	resChan := make(chan *opResult)
+	doneChan := make(chan bool)
 
 	wg := &sync.WaitGroup{}
 	wg.Add(maxWorkers)
-
 	for i := 0; i < maxWorkers; i++ {
 		go func(done func()) {
 			for j := range jobChan {
@@ -75,16 +74,13 @@ func (ru *runner) parallel(jobs []job, logger *zap.Logger) ([]*result, error) {
 
 	go func() {
 		for r := range resChan {
-			res = append(res, r)
-		}
-	}()
-
-	go func() {
-		for err := range errChan {
-			if err != nil {
-				errs = append(errs, err)
+			if r.error != nil {
+				errs = append(errs, r.error)
+			} else {
+				res = append(res, r.results)
 			}
 		}
+		close(doneChan)
 	}()
 
 	infoFields := make([]zap.Field, 0, len(jobs))
@@ -94,12 +90,12 @@ func (ru *runner) parallel(jobs []job, logger *zap.Logger) ([]*result, error) {
 	}
 
 	logger.Info("Current jobs:", infoFields...)
-
 	close(jobChan)
 
 	wg.Wait()
 	close(resChan)
-	close(errChan)
+
+	<-doneChan
 
 	if len(errs) > 0 {
 		return nil, formatErrors(errs)
