@@ -153,6 +153,34 @@ func TestRun(t *testing.T) {
 	})
 }
 
+func TestBuildJobs(t *testing.T) {
+	wd, err := os.Getwd()
+	require.NoError(t, err)
+	wd = findParentDir(t, wd, "semgrep")
+
+	t.Run("Works as expected", func(t *testing.T) {
+		rootPath := filepath.Join(wd, "plugin", "fixtures")
+		rootYaml := filepath.Join(rootPath, "semgrep.yaml")
+
+		configs, err := findYamlRecursive(rootPath)
+		require.NoError(t, err)
+
+		rootArgs := newArgs(rootYaml, rootPath)
+
+		jobs := buildJobs(configs, rootPath, rootArgs)
+		entries, err := os.ReadDir(rootPath)
+
+		// should not count test-no-yaml folder
+		assert.Equal(t, len(entries)-1, len(jobs))
+
+		for _, j := range jobs {
+			f, err := os.Stat(j.path)
+			require.NoError(t, err)
+			assert.True(t, f.IsDir())
+		}
+	})
+}
+
 func badOutput() []byte {
 	return []byte{234}
 }

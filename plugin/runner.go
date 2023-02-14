@@ -121,3 +121,21 @@ func (ru *runner) exec(args []string, cwd string) ([]byte, error) {
 	}
 	return stdOut, nil
 }
+
+func buildJobs(configs []projectConfig, rootPath string, rootArgs []string) []job {
+	jobs := make([]job, 0, len(configs))
+
+	for _, config := range configs {
+		if config.path == rootPath {
+			continue
+		}
+
+		args := newArgs(config.filePath(), config.path)
+		j := newJob(rootPath, config.path, args)
+		jobs = append(jobs, j)
+		rootArgs = append(rootArgs, "--exclude", config.path)
+	}
+
+	jobs = append(jobs, newJob(rootPath, rootPath, rootArgs))
+	return jobs
+}
