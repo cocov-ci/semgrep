@@ -164,10 +164,12 @@ func TestRun(t *testing.T) {
 
 			helper.ctx.EXPECT().Workdir().Return(rootPath)
 
+			issuesPerProject := 3
+
 			for _, j := range jobs {
 				cat := performance
 				filePath := filepath.Join(j.path, "file.go")
-				output := expectedOutput(t, filePath, cat, 3)
+				output := expectedOutput(t, filePath, cat, issuesPerProject)
 				opts := &cocov.ExecOpts{Workdir: j.path}
 				helper.exec.EXPECT().Exec2("semgrep", j.args, opts).
 					Return(output, nil, nil)
@@ -176,7 +178,12 @@ func TestRun(t *testing.T) {
 			res, err := helper.start()
 			require.NoError(t, err)
 			assert.NotNil(t, res)
-			assert.Len(t, res, len(configs)*3)
+			expectedResults := len(configs) * issuesPerProject
+			ok := len(res) == expectedResults
+			assert.Truef(t, ok,
+				"Matches the number of expected results.\nCurrent: %d / Expected: %d",
+				len(res), expectedResults,
+			)
 		})
 	})
 }
