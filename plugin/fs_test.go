@@ -23,13 +23,14 @@ func TestFindYamlRecursive(t *testing.T) {
 	})
 
 	t.Run("Found yaml", func(t *testing.T) {
-		parent := filepath.Join(wd, "plugin/fixtures")
+		parent := filepath.Join(wd, "plugin", "fixtures")
 		pathsFound, err := findYamlRecursive(parent)
 		require.NoError(t, err)
 
 		entries, err := os.ReadDir(parent)
 		require.NoError(t, err)
-		require.Equal(t, len(entries), len(pathsFound))
+		// should avoid test-no-yaml folder
+		require.Equal(t, len(entries)-1, len(pathsFound))
 
 		for _, p := range pathsFound {
 			info, err := os.Stat(p.path)
