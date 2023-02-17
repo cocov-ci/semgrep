@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+docker build -f ./Dockerfile -t "cocov/semgrep:$(cat "./VERSION" | head -n 1)" $@ .
+
+docker push "cocov/semgrep:$(cat "./VERSION" | head -n 1)"
+
