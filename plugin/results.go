@@ -35,28 +35,6 @@ type results struct {
 	Results []*result `json:"results"`
 }
 
-type result struct {
-	Path  string `json:"path"`
-	Extra extra  `json:"extra"`
-	Start start  `json:"start"`
-	kind  cocov.IssueKind
-	valid bool
-}
-
-type extra struct {
-	Message  string   `json:"message"`
-	Metadata metadata `json:"metadata"`
-}
-
-type metadata struct {
-	Category   string   `json:"category"`
-	References []string `json:"references"`
-}
-
-type start struct {
-	Line int `json:"line"`
-}
-
 func (r *results) renderResults(rootPath string) *results {
 	if len(r.Results) > 0 {
 		for _, res := range r.Results {
@@ -83,6 +61,39 @@ func (r *results) renderResults(rootPath string) *results {
 		}
 	}
 	return r
+}
+
+type result struct {
+	Path  string `json:"path"`
+	Extra extra  `json:"extra"`
+	Start start  `json:"start"`
+	kind  cocov.IssueKind
+	valid bool
+}
+
+type extra struct {
+	Message  string   `json:"message"`
+	Metadata metadata `json:"metadata"`
+}
+
+type metadata struct {
+	Category   string   `json:"category"`
+	References []string `json:"references"`
+}
+
+type start struct {
+	Line int `json:"line"`
+}
+
+func (r result) message() string { return r.Extra.Message }
+
+func (r result) startLine() uint { return uint(r.Start.Line) }
+
+func (r result) hashID() string {
+	input := fmt.Sprintf("%s-%s-%s", r.kind,
+		fmt.Sprintf("%d", r.Start), r.Path)
+
+	return cocov.SHA1([]byte(input))
 }
 
 func renderMessage(message string, references []string) string {
