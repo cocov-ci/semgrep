@@ -1,0 +1,6 @@
+version: "0.1.alpha"
+
+checks:
+  - plugin: cocov/semgrep:v0.1
+    envs:
+      GOPRIVATE: github.com/cocov-ci
