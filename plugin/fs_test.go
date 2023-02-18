@@ -46,11 +46,7 @@ func TestFindYamlRecursive(t *testing.T) {
 }
 
 func findParentDir(t *testing.T, current, parent string) string {
-	require.True(t, strings.Contains(current, parent))
-
-	if filepath.Base(current) == parent {
-		return current
-	}
-
-	return findParentDir(t, filepath.Dir(current), parent)
+	out, err := cocov.Exec("git", []string{"rev-parse", "--show-toplevel"}, nil)
+	require.NoError(t, err)
+	return strings.TrimSpace(string(out))
 }
