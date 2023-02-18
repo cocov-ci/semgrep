@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/cocov-ci/go-plugin-kit/cocov"
 	"github.com/stretchr/testify/require"
 )
 

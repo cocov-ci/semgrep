@@ -1,8 +1,6 @@
 package plugin
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 type job struct {
 	rootPath string

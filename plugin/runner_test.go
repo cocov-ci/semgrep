@@ -4,16 +4,18 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/cocov-ci/go-plugin-kit/cocov"
-	"github.com/cocov-ci/semgrep/mocks"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"go.uber.org/zap"
 	"os"
 	"path"
 	"path/filepath"
 	"testing"
+
+	"github.com/cocov-ci/go-plugin-kit/cocov"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
+
+	"github.com/cocov-ci/semgrep/mocks"
 )
 
 type testHelper struct {
@@ -203,6 +205,7 @@ func TestBuildJobs(t *testing.T) {
 		rootArgs := newArgs(rootYaml, rootPath)
 
 		jobs := buildJobs(configs, rootPath, rootArgs)
+		// nolint innefassing
 		entries, err := os.ReadDir(rootPath)
 
 		// should not count test-no-yaml folder

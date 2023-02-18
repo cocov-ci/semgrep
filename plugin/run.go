@@ -1,10 +1,11 @@
 package plugin
 
 import (
-	"github.com/cocov-ci/go-plugin-kit/cocov"
-	"go.uber.org/zap"
 	"log"
 	"os"
+
+	"github.com/cocov-ci/go-plugin-kit/cocov"
+	"go.uber.org/zap"
 )
 
 const (

@@ -2,9 +2,10 @@ package plugin
 
 import (
 	"encoding/json"
+	"sync"
+
 	"github.com/cocov-ci/go-plugin-kit/cocov"
 	"go.uber.org/zap"
-	"sync"
 )
 
 type runner struct{ executor }

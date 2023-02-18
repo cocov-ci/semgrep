@@ -2,9 +2,10 @@ package plugin
 
 import (
 	"fmt"
-	"github.com/cocov-ci/go-plugin-kit/cocov"
 	"path/filepath"
 	"strings"
+
+	"github.com/cocov-ci/go-plugin-kit/cocov"
 )
 
 // Those constants represents official semgrep results categories.
