@@ -19,7 +19,6 @@ import (
 )
 
 type testHelper struct {
-	l    *zap.Logger
 	ctx  *mocks.MockContext
 	exec *mocks.Mockexecutor
 	ru   *runner
@@ -27,16 +26,20 @@ type testHelper struct {
 
 func newHelper(ctrl *gomock.Controller) *testHelper {
 	exec := mocks.NewMockexecutor(ctrl)
+	ctx := mocks.NewMockContext(ctrl)
+	ctx.EXPECT().L().
+		DoAndReturn(func() *zap.Logger { return zap.NewNop() }).
+		AnyTimes()
+
 	return &testHelper{
-		l:    zap.NewNop(),
-		ctx:  mocks.NewMockContext(ctrl),
+		ctx:  ctx,
 		exec: exec,
 		ru:   newRunner(exec),
 	}
 }
 
 func (h *testHelper) start() ([]*result, error) {
-	return h.ru.run(h.ctx, h.l)
+	return h.ru.run(h.ctx)
 }
 
 func (h *testHelper) createFixtureYaml(t *testing.T, dirPath string) string {
@@ -52,7 +55,6 @@ func TestRun(t *testing.T) {
 	wd, err := os.Getwd()
 	require.NoError(t, err)
 	wd = findParentDir(t, wd, "semgrep")
-
 	boom := errors.New("boom")
 
 	t.Run("Fails looking for semgrep configuration files", func(t *testing.T) {

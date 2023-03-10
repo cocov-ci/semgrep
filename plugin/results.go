@@ -90,9 +90,11 @@ func (r result) message() string { return r.Extra.Message }
 
 func (r result) startLine() uint { return uint(r.Start.Line) }
 
-func (r result) hashID() string {
-	input := fmt.Sprintf("%s-%s-%s", r.kind,
-		fmt.Sprintf("%d", r.Start), r.Path)
+func (r result) hashID(commitSha string) string {
+	input := fmt.Sprintf(
+		"%s-%s-%s-%s",
+		r.kind, fmt.Sprintf("%d", r.Start), r.Path, commitSha,
+	)
 
 	return cocov.SHA1([]byte(input))
 }

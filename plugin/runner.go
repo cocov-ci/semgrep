@@ -12,13 +12,13 @@ type runner struct{ executor }
 
 func newRunner(e executor) *runner { return &runner{e} }
 
-func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) {
+func (ru *runner) run(ctx cocov.Context) ([]*result, error) {
 	rootPath := ctx.Workdir()
 	rootYaml := noYaml
 
 	configs, err := findYamlRecursive(rootPath)
 	if err != nil {
-		logger.Error("Error looking for semgrep configuration files", zap.Error(err))
+		ctx.L().Error("Error looking for semgrep configuration files", zap.Error(err))
 		return nil, err
 	}
 
@@ -33,19 +33,19 @@ func (ru *runner) run(ctx cocov.Context, logger *zap.Logger) ([]*result, error) 
 
 	if len(configs) > 1 {
 		jobs := buildJobs(configs, rootPath, rootArgs)
-		return ru.parallel(jobs, logger)
+		return ru.parallel(jobs, ctx.L())
 	}
 
 	out, err := ru.exec(rootArgs, rootPath)
 	if err != nil {
-		logger.Error("Error", zap.Error(err))
+		ctx.L().Error("Error", zap.Error(err))
 		return nil, err
 	}
 
 	res := &results{}
 	if err = json.Unmarshal(out, res); err != nil {
 		decodeError := decodeErr(rootPath, rootArgs, out, err)
-		logger.Error("Error", zap.Error(decodeError))
+		ctx.L().Error("Error", zap.Error(decodeError))
 		return nil, decodeError
 	}
 

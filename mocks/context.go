@@ -9,6 +9,7 @@ import (
 
 	cocov "github.com/cocov-ci/go-plugin-kit/cocov"
 	gomock "github.com/golang/mock/gomock"
+	zap "go.uber.org/zap"
 )
 
 // MockContext is a mock of Context interface.
@@ -62,6 +63,63 @@ func (mr *MockContextMockRecorder) EmitIssue(arg0, arg1, arg2, arg3, arg4, arg5 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmitIssue", reflect.TypeOf((*MockContext)(nil).EmitIssue), arg0, arg1, arg2, arg3, arg4, arg5)
 }
 
+// L mocks base method.
+func (m *MockContext) L() *zap.Logger {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "L")
+	ret0, _ := ret[0].(*zap.Logger)
+	return ret0
+}
+
+// L indicates an expected call of L.
+func (mr *MockContextMockRecorder) L() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "L", reflect.TypeOf((*MockContext)(nil).L))
+}
+
+// LoadArtifactCache mocks base method.
+func (m *MockContext) LoadArtifactCache(arg0 []string, arg1 string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoadArtifactCache", arg0, arg1)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoadArtifactCache indicates an expected call of LoadArtifactCache.
+func (mr *MockContextMockRecorder) LoadArtifactCache(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadArtifactCache", reflect.TypeOf((*MockContext)(nil).LoadArtifactCache), arg0, arg1)
+}
+
+// LoadToolCache mocks base method.
+func (m *MockContext) LoadToolCache(arg0, arg1 string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoadToolCache", arg0, arg1)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// LoadToolCache indicates an expected call of LoadToolCache.
+func (mr *MockContextMockRecorder) LoadToolCache(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadToolCache", reflect.TypeOf((*MockContext)(nil).LoadToolCache), arg0, arg1)
+}
+
+// Logger mocks base method.
+func (m *MockContext) Logger() *zap.Logger {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Logger")
+	ret0, _ := ret[0].(*zap.Logger)
+	return ret0
+}
+
+// Logger indicates an expected call of Logger.
+func (mr *MockContextMockRecorder) Logger() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Logger", reflect.TypeOf((*MockContext)(nil).Logger))
+}
+
 // RepoName mocks base method.
 func (m *MockContext) RepoName() string {
 	m.ctrl.T.Helper()
@@ -74,6 +132,32 @@ func (m *MockContext) RepoName() string {
 func (mr *MockContextMockRecorder) RepoName() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RepoName", reflect.TypeOf((*MockContext)(nil).RepoName))
+}
+
+// StoreArtifactCache mocks base method.
+func (m *MockContext) StoreArtifactCache(arg0 []string, arg1 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "StoreArtifactCache", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// StoreArtifactCache indicates an expected call of StoreArtifactCache.
+func (mr *MockContextMockRecorder) StoreArtifactCache(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StoreArtifactCache", reflect.TypeOf((*MockContext)(nil).StoreArtifactCache), arg0, arg1)
+}
+
+// StoreToolCache mocks base method.
+func (m *MockContext) StoreToolCache(arg0, arg1 string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "StoreToolCache", arg0, arg1)
+}
+
+// StoreToolCache indicates an expected call of StoreToolCache.
+func (mr *MockContextMockRecorder) StoreToolCache(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StoreToolCache", reflect.TypeOf((*MockContext)(nil).StoreToolCache), arg0, arg1)
 }
 
 // Workdir mocks base method.
