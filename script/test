@@ -15,12 +15,11 @@ fi
 go mod download
 go mod tidy
 if [[ "$COVER" == "yes" ]]; then
-  OUT="../coverage/$plugin.out"
-  HTML="../coverage/$plugin.html"
+  OUT="./coverage/c.out"
+  HTML="./coverage/c.html"
   go test ./... -covermode=count -coverprofile="$OUT"
   go tool cover -html="$OUT" -o "$HTML"
   rm "$OUT"
 else
   go test ./...
 fi
-
