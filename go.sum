@@ -1,6 +1,6 @@
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
-github.com/cocov-ci/go-plugin-kit v0.1.14 h1:Yv2oJVbmD5PdmJlO/bGuAwCc/HfMetPXxUb2XHDaKlA=
-github.com/cocov-ci/go-plugin-kit v0.1.14/go.mod h1:Ih8J02wRao5FW0DlVXmFmiQoPlaNZGEEqwvXI4UoXQw=
+github.com/cocov-ci/go-plugin-kit v0.1.15 h1:fLbR1PgihDE0RdmCyPVMEKJuX6QxEso+mykiAtYXyLo=
+github.com/cocov-ci/go-plugin-kit v0.1.15/go.mod h1:Ih8J02wRao5FW0DlVXmFmiQoPlaNZGEEqwvXI4UoXQw=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -11,8 +11,8 @@ github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD/fhyJ8=
 github.com/google/go-querystring v1.1.0/go.mod h1:Kcdr2DB4koayq7X8pmAG4sNG59So17icRSOU623lUBU=
 github.com/heyvito/httpie v0.1.1 h1:2tyQ6BFcKTUXW75VMnWT2RuM2nyLb3/kpguo5x5gUgI=
-github.com/klauspost/compress v1.16.0 h1:iULayQNOReoYUe+1qtKOqw9CwJv3aNQu8ivo7lw1HU4=
-github.com/klauspost/compress v1.16.0/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
+github.com/klauspost/compress v1.16.3 h1:XuJt9zzcnaz6a16/OU53ZjWp/v7/42WcR5t2a0PcNQY=
+github.com/klauspost/compress v1.16.3/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/levigross/grequests v0.0.0-20221222020224-9eee758d18d5 h1:AsF9Q1mQoyLv0HzvHFW7O+19dHilOcKU74k7E5ufI1A=
 github.com/levigross/grequests v0.0.0-20221222020224-9eee758d18d5/go.mod h1:XfzeIE2WC7CGDhlZJY/rUdqUPy0IPcyI6hoIjhAMNbQ=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
