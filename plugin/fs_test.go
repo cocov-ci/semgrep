@@ -24,12 +24,26 @@ func TestFindYamlRecursive(t *testing.T) {
 	})
 
 	t.Run("Found yaml", func(t *testing.T) {
-		parent := filepath.Join(wd, "plugin", "fixtures")
-		pathsFound, err := findYamlRecursive(parent)
+		baseDir := filepath.Join(wd, "plugin", "fixtures")
+		baseYaml := createFixtureYaml(t, baseDir, false)
+
+		t.Cleanup(func() {
+			err = os.Remove(baseYaml)
+			require.NoError(t, err)
+		})
+
+		numFixtures := 5
+
+		for i := 0; i <= numFixtures; i++ {
+			createFixtureFiles(t, baseDir)
+		}
+
+		pathsFound, err := findYamlRecursive(baseDir)
 		require.NoError(t, err)
 
-		entries, err := os.ReadDir(parent)
+		entries, err := os.ReadDir(baseDir)
 		require.NoError(t, err)
+
 		// should avoid test-no-yaml folder
 		require.Equal(t, len(entries)-1, len(pathsFound))
 

@@ -1,9 +1,7 @@
 package plugin
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -13,43 +11,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.uber.org/zap"
-
-	"github.com/cocov-ci/semgrep/mocks"
 )
-
-type testHelper struct {
-	ctx  *mocks.MockContext
-	exec *mocks.Mockexecutor
-	ru   *runner
-}
-
-func newHelper(ctrl *gomock.Controller) *testHelper {
-	exec := mocks.NewMockexecutor(ctrl)
-	ctx := mocks.NewMockContext(ctrl)
-	ctx.EXPECT().L().
-		DoAndReturn(func() *zap.Logger { return zap.NewNop() }).
-		AnyTimes()
-
-	return &testHelper{
-		ctx:  ctx,
-		exec: exec,
-		ru:   newRunner(exec),
-	}
-}
-
-func (h *testHelper) start() ([]*result, error) {
-	return h.ru.run(h.ctx)
-}
-
-func createFixtureYaml(t *testing.T, dirPath string) string {
-	fileName := "semgrep.yaml"
-	fPath := filepath.Join(dirPath, fileName)
-	_, err := os.Create(fPath)
-	require.NoError(t, err)
-
-	return fPath
-}
 
 func TestRun(t *testing.T) {
 	wd, err := os.Getwd()
@@ -219,24 +181,4 @@ func TestBuildJobs(t *testing.T) {
 			assert.True(t, f.IsDir())
 		}
 	})
-}
-
-func badOutput() []byte {
-	return []byte{234}
-}
-
-func expectedOutput(t *testing.T, filePath, category string, numResults int) []byte {
-	res := make([]*result, 0, numResults)
-	for i := 0; i < numResults; i++ {
-		msg := fmt.Sprintf("message for issue at path %s", filePath)
-		refs := []string{fmt.Sprintf("ref for issue at path %s", filePath)}
-		r := newResult(filePath, msg, category, refs)
-		res = append(res, r)
-	}
-
-	rslt := &results{Results: res}
-
-	data, err := json.Marshal(rslt)
-	require.NoError(t, err)
-	return data
 }
