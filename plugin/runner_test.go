@@ -118,6 +118,10 @@ func TestRun(t *testing.T) {
 			rootPath := filepath.Join(wd, "plugin", "fixtures")
 			rootYaml := createFixtureYaml(t, rootPath, true)
 
+			for i := 0; i <= 5; i++ {
+				createFixtureFiles(t, rootPath)
+			}
+
 			configs, err := findYamlRecursive(rootPath)
 			require.NoError(t, err)
 
@@ -160,12 +164,12 @@ func TestBuildJobs(t *testing.T) {
 
 	t.Run("Works as expected", func(t *testing.T) {
 		rootPath := filepath.Join(wd, "plugin", "fixtures")
-		rootYaml := filepath.Join(rootPath, "semgrep.yaml")
+		yamlPath := createFixtureYaml(t, rootPath, true)
 
 		configs, err := findYamlRecursive(rootPath)
 		require.NoError(t, err)
 
-		rootArgs := newArgs(rootYaml, rootPath)
+		rootArgs := newArgs(yamlPath, rootPath)
 
 		jobs := buildJobs(configs, rootPath, rootArgs)
 		// nolint innefassing
