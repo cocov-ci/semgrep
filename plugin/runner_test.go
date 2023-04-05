@@ -96,8 +96,7 @@ func TestRun(t *testing.T) {
 
 			helper.ctx.EXPECT().Workdir().Return(singlePath)
 
-			fixtureYaml := createFixtureYaml(t, singlePath)
-			t.Cleanup(func() { _ = os.Remove(fixtureYaml) })
+			fixtureYaml := createFixtureYaml(t, singlePath, true)
 
 			cat := performance
 			filePath := path.Join(singlePath, "file.go")
@@ -117,7 +116,7 @@ func TestRun(t *testing.T) {
 	t.Run("Parallel", func(t *testing.T) {
 		t.Run("Works as expected", func(t *testing.T) {
 			rootPath := filepath.Join(wd, "plugin", "fixtures")
-			rootYaml := filepath.Join(rootPath, "semgrep.yaml")
+			rootYaml := createFixtureYaml(t, rootPath, true)
 
 			configs, err := findYamlRecursive(rootPath)
 			require.NoError(t, err)

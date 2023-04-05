@@ -38,7 +38,23 @@ func (h *testHelper) start() ([]*result, error) {
 	return h.ru.run(h.ctx)
 }
 
-func createFixtureFiles(t *testing.T, dirPath string) string {
+func createFixtureYaml(t *testing.T, dirPath string, remove bool) string {
+	fileName := "semgrep.yaml"
+	yamlPath := filepath.Join(dirPath, fileName)
+
+	err := os.WriteFile(yamlPath, []byte("foo"), os.ModePerm)
+	require.NoError(t, err)
+
+	if remove {
+		t.Cleanup(func() {
+			err = os.Remove(yamlPath)
+			require.NoError(t, err)
+		})
+	}
+	return yamlPath
+}
+
+func createFixtureFiles(t *testing.T, dirPath string) {
 	fixtureDir, err := os.MkdirTemp(dirPath, "")
 	require.NoError(t, err)
 
