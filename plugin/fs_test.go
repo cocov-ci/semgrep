@@ -14,7 +14,7 @@ func TestFindYamlRecursive(t *testing.T) {
 	wd, err := os.Getwd()
 	require.NoError(t, err)
 
-	wd = findParentDir(t, wd, "semgrep")
+	wd = findRepositoryRoot(t, wd, "semgrep")
 
 	t.Run("Yaml not found", func(t *testing.T) {
 		parent := filepath.Join(wd, "mocks")
@@ -45,7 +45,7 @@ func TestFindYamlRecursive(t *testing.T) {
 	})
 }
 
-func findParentDir(t *testing.T, current, parent string) string {
+func findRepositoryRoot(t *testing.T, current, parent string) string {
 	out, err := cocov.Exec("git", []string{"rev-parse", "--show-toplevel"}, nil)
 	require.NoError(t, err)
 	return strings.TrimSpace(string(out))

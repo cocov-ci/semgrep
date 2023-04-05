@@ -54,7 +54,7 @@ func (h *testHelper) createFixtureYaml(t *testing.T, dirPath string) string {
 func TestRun(t *testing.T) {
 	wd, err := os.Getwd()
 	require.NoError(t, err)
-	wd = findParentDir(t, wd, "semgrep")
+	wd = findRepositoryRoot(t, wd, "semgrep")
 	boom := errors.New("boom")
 
 	t.Run("Fails looking for semgrep configuration files", func(t *testing.T) {
@@ -195,7 +195,7 @@ func TestRun(t *testing.T) {
 func TestBuildJobs(t *testing.T) {
 	wd, err := os.Getwd()
 	require.NoError(t, err)
-	wd = findParentDir(t, wd, "semgrep")
+	wd = findRepositoryRoot(t, wd, "semgrep")
 
 	t.Run("Works as expected", func(t *testing.T) {
 		rootPath := filepath.Join(wd, "plugin", "fixtures")
