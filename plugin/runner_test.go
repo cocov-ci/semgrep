@@ -42,7 +42,7 @@ func (h *testHelper) start() ([]*result, error) {
 	return h.ru.run(h.ctx)
 }
 
-func (h *testHelper) createFixtureYaml(t *testing.T, dirPath string) string {
+func createFixtureYaml(t *testing.T, dirPath string) string {
 	fileName := "semgrep.yaml"
 	fPath := filepath.Join(dirPath, fileName)
 	_, err := os.Create(fPath)
@@ -134,7 +134,7 @@ func TestRun(t *testing.T) {
 
 			helper.ctx.EXPECT().Workdir().Return(singlePath)
 
-			fixtureYaml := helper.createFixtureYaml(t, singlePath)
+			fixtureYaml := createFixtureYaml(t, singlePath)
 			t.Cleanup(func() { _ = os.Remove(fixtureYaml) })
 
 			cat := performance
